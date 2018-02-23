@@ -11,6 +11,16 @@ const url = require('url')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+app.on('web-contents-created', (e, webContents) => {
+  webContents.on('context-menu', async (e, props) => {
+    const menu = new electron.Menu()
+    menu.append(new electron.MenuItem({label: 'MenuItem1', click() { console.log('item 1 clicked') }}))
+    menu.append(new electron.MenuItem({type: 'separator'}))
+    menu.append(new electron.MenuItem({label: 'MenuItem2', type: 'checkbox', checked: true}))
+    menu.popup({window: mainWindow})
+  })
+})
+
 function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
